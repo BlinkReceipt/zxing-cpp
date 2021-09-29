@@ -2,7 +2,7 @@ from conans import ConanFile, tools, CMake
 from conans.errors import ConanInvalidConfiguration
 import os
 class ZXingCppConan(ConanFile):
-    name = "zxing-cpp"
+    name = "zxing-cpp-br"
     homepage = "https://github.com/BlinkReceipt/zxing-cpp"
     description = "c++14 port of ZXing, a barcode scanning library"
     topics = ("conan", "zxing", "barcode", "scanner", "generator")
