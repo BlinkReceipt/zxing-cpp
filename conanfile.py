@@ -3,12 +3,13 @@ from conans.errors import ConanInvalidConfiguration
 import os
 class ZXingCppConan(ConanFile):
     name = "zxing-cpp-br"
+    version = "1.0.8"
     homepage = "https://github.com/BlinkReceipt/zxing-cpp"
     description = "c++14 port of ZXing, a barcode scanning library"
     topics = ("conan", "zxing", "barcode", "scanner", "generator")
     url = "https://github.com/conan-io/conan-center-index"
     license = "Apache-2.0"
-    exports_sources = ["CMakeLists.txt", "patches/**"]
+    exports_sources = ["CMakeLists.txt", "core/**", "example/**","test/**","thirdparty/**","wrappers/**","zxing.pc.in"]
     settings = "os", "arch", "compiler", "build_type"
     options = {
         "shared": [True, False],
@@ -46,9 +47,6 @@ class ZXingCppConan(ConanFile):
     def configure(self):
         if self.options.shared:
             del self.options.fPIC
-    def source(self):
-        tools.get(**self.conan_data["sources"][self.version])
-        os.rename("zxing-cpp-{}".format(self.version), self._source_subfolder)
     def _configure_cmake(self):
         if self._cmake:
             return self._cmake
@@ -57,11 +55,7 @@ class ZXingCppConan(ConanFile):
         self._cmake.definitions["ENABLE_DECODERS"] = self.options.enable_decoders
         self._cmake.configure(build_folder=self._build_subfolder)
         return self._cmake
-    def _patch_sources(self):
-        for patch in self.conan_data["patches"][self.version]:
-            tools.patch(**patch)
     def build(self):
-        self._patch_sources()
         cmake = self._configure_cmake()
         cmake.build()
     def package(self):
